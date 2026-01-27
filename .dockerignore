@@ -1,0 +1,24 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+.claude
+
+# Build artifacts
+pastebin
+*.out
+coverage.out
+
+# Documentation
+README.md
+SECURITY.md
+
+# Makefile
+Makefile
+
+# Tests
+*_test.go
+integration_test.go
