@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastebin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .result a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Pastebin</h1>
+        <textarea id="content" placeholder="Paste your text here..."></textarea>
+        <div class="controls">
+            <label>
+                Expire after:
+                <input type="number" id="ttl" value="0" min="0" placeholder="seconds">
+                seconds (0 = never)
+            </label>
+        </div>
+        <button onclick="createPaste()">Create Paste</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        async function createPaste() {
+            const content = document.getElementById('content').value;
+            const ttl = parseInt(document.getElementById('ttl').value) || 0;
+
+            if (!content) {
+                alert('Please enter some content');
+                return;
+            }
+
+            try {
+                const response = await fetch('/paste', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content, ttl }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const url = `${window.location.origin}/paste/${data.id}`;
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = `
+                        <strong>Paste created successfully!</strong><br>
+                        <a href="${url}" target="_blank">${url}</a>
+                    `;
+                    resultDiv.classList.add('show');
+                    document.getElementById('content').value = '';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error creating paste: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
