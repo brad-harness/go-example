@@ -15,8 +15,8 @@ pipeline:
               - run:
                   container: golang:1.25.3
                   script: |-
-                    curl -fSsL -o /opt/harness/hcli https://storage.googleapis.com/harness-ti/hcli/vv0.6/hcli-linux-amd64
-                    chmod 755 /opt/harness/hcli
+                    curl -fSsL -o /tmp/hcli https://storage.googleapis.com/harness-ti/hcli/vv0.6/hcli-linux-amd64
+                    chmod 755 /tmp/hcli
                     echo "$HARNESS_TI_SERVICE_TOKEN" | base64
                     go test -coverprofile=coverage.out ./...
-                    /opt/harness/hcli cov  upload --file coverage.out --api-key="$(echo $HARNESS_TI_SERVICE_TOKEN | base64 -d)" --endpoint="https://qa.harness.io/gateway/ti-service/coverage"
+                    /tmp/hcli cov  upload --file coverage.out --api-key="$(echo $HARNESS_TI_SERVICE_TOKEN | base64 -d)" --endpoint="https://qa.harness.io/gateway/ti-service/coverage"
