@@ -12,13 +12,9 @@ pipeline:
               - run:
                   container: golang:1.25.3
                   script: go build -o pastebin .
-              - run:
-                  container: golang:1.25.3
-                  script: |-
-                    set -ex
-                    echo "$HARNESS_TI_SERVICE_TOKEN" | base64
-                    git clone "https://git.qa.harness.io/zEaak-FLS425IEO7OLzMUg/default/enverdemo/hcli.git" /opt/harness/hcli
-                    chmod 755 /opt/harness/hcli/hcli
-                    echo "$HARNESS_TI_SERVICE_TOKEN" | base64
-                    go test -coverprofile=coverage.out ./...
-                    /opt/harness/hcli/hcli cov  upload --file coverage.out --api-key="$HARNESS_TI_SERVICE_TOKEN" --endpoint="https://qa.harness.io/gateway/ti-service/coverage"
+              - run: |-
+                  # git clone "https://git.qa.harness.io/zEaak-FLS425IEO7OLzMUg/default/enverdemo/hcli.git" /opt/harness/hcli
+                  # chmod 755 /opt/harness/hcli/hcli
+                  echo "$HARNESS_TI_SERVICE_TOKEN" | base64
+                  go test -coverprofile=coverage.out ./...
+                  hcli cov  upload --file coverage.out --api-key="$(echo $HARNESS_TI_SERVICE_TOKEN | base64 -d)" --endpoint="https://qa.harness.io/gateway/ti-service/coverage"
