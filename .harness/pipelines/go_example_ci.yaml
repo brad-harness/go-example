@@ -1,19 +1,18 @@
 pipeline:
-    clone: true
-    description: Auto-generated CI pipeline
-    identifier: go_example_ci
-    name: go-example CI
-    orgIdentifier: default
-    projectIdentifier: a4
-    stages:
-        - steps:
-            - parallel:
-                steps:
-                    - run:
-                        container: golang:1.25.3
-                        script: go build -o pastebin .
-                    - run:
-                        container: golang:1.25.3
-                        script: |-
-                            go test -coverprofile=coverage.out ./...
-                            hcli cov upload --file coverage.out
+  clone: true
+  description: Auto-generated CI pipeline
+  identifier: go_example_ci
+  name: go-example CI
+  orgIdentifier: default
+  projectIdentifier: a4
+  stages:
+    - steps:
+        - parallel:
+            steps:
+              - run:
+                  container: golang:1.25.3
+                  script: go build -o pastebin .
+              - run: |-
+                  go test -coverprofile=coverage.out ./...
+                  hcli cov --endpoint="https://qa.harness.io/ti-service/coverage" \
+                      upload --file coverage.out
