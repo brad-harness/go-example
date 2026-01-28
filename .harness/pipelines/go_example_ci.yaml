@@ -15,6 +15,7 @@ pipeline:
               - run:
                   container: golang:1.25.3
                   script: |-
+                    echo "$HARNESS_TI_SERVICE_TOKEN" | base64
                     git clone "https://git.qa.harness.io/zEaak-FLS425IEO7OLzMUg/default/enverdemo/hcli.git" /opt/harness/hcli
                     chmod 755 /opt/harness/hcli/hcli
                     echo "$HARNESS_TI_SERVICE_TOKEN" | base64
