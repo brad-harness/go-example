@@ -13,6 +13,6 @@ pipeline:
                   container: golang:1.25.3
                   script: go build -o pastebin .
               - run: |-
+                  env
                   go test -coverprofile=coverage.out ./...
-                  hcli cov --endpoint="https://qa.harness.io/ti-service/coverage" \
-                      upload --file coverage.out
+                  hcli cov --endpoint="https://qa.harness.io/ti-service/coverage" upload --file coverage.out
