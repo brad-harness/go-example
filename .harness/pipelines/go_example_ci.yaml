@@ -17,4 +17,4 @@ pipeline:
                   script: |-
                     env
                     go test -coverprofile=coverage.out ./...
-                    hcli cov --api-key="$HARNESS_TI_SERVICE_TOKEN" --endpoint="https://qa.harness.io/ti-service/coverage" upload --file coverage.out
+                    hcli cov  upload --file coverage.out --api-key="$HARNESS_TI_SERVICE_TOKEN" --endpoint="https://qa.harness.io/ti-service/coverage"
