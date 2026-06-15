@@ -1,4 +1,5 @@
 pipeline:
   stages:
     - steps:
-        - run: echo "hello world"
+        - run:
+            script: <+fileStore.getAsString('rishi')>
