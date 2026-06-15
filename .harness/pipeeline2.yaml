@@ -2,4 +2,4 @@ pipeline:
   stages:
     - steps:
         - run:
-            script: <+fileStore.getAsString('rishi')>
+            script: <+fileStore.getAsString('/ccnbcbcb')>
